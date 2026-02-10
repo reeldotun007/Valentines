@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>For Abieyuwa 💕</title>
+
+<style>
+body{
+  margin:0;
+  background:#ffc1da;
+  font-family:Arial, sans-serif;
+  overflow:hidden;
+  text-align:center;
+}
+
+/* ☁️ pink cloud background */
+.cloud{
+ position:absolute;
+ background:#ffd9ec;
+ border-radius:50%;
+ opacity:0.6;
+ filter:blur(20px);
+ animation:cloudMove linear infinite;
+}
+
+@keyframes cloudMove{
+ from{transform:translateX(-20vw);}
+ to{transform:translateX(120vw);}
+}
+
+h1{
+  margin-top:110px;
+  font-size:38px;
+  color:#ff0f7b;
+  position:relative;
+  z-index:2;
+}
+
+button{
+  border:none;
+  border-radius:16px;
+  padding:18px 30px;
+  font-size:20px;
+  cursor:pointer;
+  margin:15px;
+  transition:0.25s ease;
+  position:relative;
+  z-index:2;
+}
+
+#yesBtn{background:#ff0f7b;color:white;}
+#noBtn{background:white;color:#ff0f7b;}
+
+#dare{
+ color:#ff0f7b;
+ font-size:16px;
+ margin-top:10px;
+ opacity:0.9;
+ position:relative;
+ z-index:2;
+ transition:0.3s ease;
+}
+
+#page2{
+ display:none;
+ height:100vh;
+ justify-content:center;
+ align-items:center;
+ flex-direction:column;
+ animation:fadeIn 1.5s ease forwards;
+ position:relative;
+ z-index:2;
+}
+
+@keyframes fadeIn{
+ from{opacity:0;transform:scale(1.1);}
+ to{opacity:1;transform:scale(1);}
+}
+
+/* floating hearts */
+.heart{
+ position:absolute;
+ color:#ff4da6;
+ animation:float 7s linear infinite;
+}
+
+@keyframes float{
+ from{transform:translateY(100vh);}
+ to{transform:translateY(-10vh);}
+}
+</style>
+</head>
+
+<body>
+
+<audio id="music" loop>
+<source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<div id="page1">
+<h1 id="typing"></h1>
+
+<div>
+<button id="yesBtn">YES 💕</button>
+<button id="noBtn">NO 🙈</button>
+</div>
+
+<div id="dare">dare you to click no 😌</div>
+</div>
+
+<div id="page2">
+<h1>You just made my day brighter 🌸✨</h1>
+<p>wish i could see that beautiful smile of yours.</p>
+</div>
+
+<script>
+/* ☁️ generate pink clouds */
+for(let c=0;c<8;c++){
+ let cloud=document.createElement("div");
+ cloud.className="cloud";
+ cloud.style.width=(150+Math.random()*200)+"px";
+ cloud.style.height=(80+Math.random()*120)+"px";
+ cloud.style.top=(Math.random()*80)+"vh";
+ cloud.style.animationDuration=(20+Math.random()*20)+"s";
+ document.body.appendChild(cloud);
+}
+
+/* typing animation */
+const text="Abieyuwa, will you be my Valentine? 💖";
+let i=0;
+function type(){
+ if(i<text.length){
+  document.getElementById("typing").innerHTML+=text.charAt(i);
+  i++;
+  setTimeout(type,60);
+ }
+}
+type();
+
+/* floating hearts */
+for(let j=0;j<30;j++){
+ let h=document.createElement("div");
+ h.className="heart";
+ h.innerHTML="❤";
+ h.style.left=Math.random()*100+"vw";
+ h.style.fontSize=(12+Math.random()*25)+"px";
+ h.style.animationDuration=(5+Math.random()*5)+"s";
+ document.body.appendChild(h);
+}
+
+let noClicks=0;
+let yesScale=1;
+let noScale=1;
+let musicStarted=false;
+
+const yesBtn=document.getElementById("yesBtn");
+const noBtn=document.getElementById("noBtn");
+const music=document.getElementById("music");
+const dare=document.getElementById("dare");
+
+/* evolving dare messages 😌 */
+const dareLines=[
+ "dare you to click no 😌",
+ "hmm… bold choice 👀",
+ "are you really sure about that? 😭",
+ "Hmm... for your mind now 💀",
+ "okay wow… you really testing fate 😭",
+ "SIKE...you're stuck with me 💕"
+];
+
+/* start music after first interaction */
+function startMusic(){
+ if(!musicStarted){
+  music.play().catch(()=>{});
+  musicStarted=true;
+ }
+}
+
+/* YES follows cursor energy */
+document.addEventListener("mousemove",(e)=>{
+ const rect=yesBtn.getBoundingClientRect();
+ const dx=e.clientX-(rect.left+rect.width/2);
+ const dy=e.clientY-(rect.top+rect.height/2);
+ yesBtn.style.transform=`translate(${dx*0.05}px,${dy*0.05}px) scale(${yesScale})`;
+});
+
+noBtn.onclick=()=>{
+ startMusic();
+
+ noClicks++;
+ yesScale+=0.25;
+ noScale-=0.2;
+
+ yesBtn.style.transform=`scale(${yesScale})`;
+ noBtn.style.transform=`scale(${noScale})`;
+
+ /* change dare text */
+ if(noClicks < dareLines.length){
+  dare.innerText=dareLines[noClicks];
+ }
+
+ if(noClicks>=5){
+  noBtn.style.display="none";
+ }
+};
+
+/* heart confetti explosion */
+function explodeHearts(){
+ for(let k=0;k<25;k++){
+  let heart=document.createElement("div");
+  heart.innerHTML="💖";
+  heart.style.position="absolute";
+  heart.style.left="50%";
+  heart.style.top="50%";
+  heart.style.fontSize="24px";
+  document.body.appendChild(heart);
+
+  let x=(Math.random()-0.5)*400;
+  let y=(Math.random()-0.5)*400;
+
+  heart.animate([
+    {transform:"translate(0,0)",opacity:1},
+    {transform:`translate(${x}px,${y}px)`,opacity:0}
+  ],{duration:1200});
+
+  setTimeout(()=>heart.remove(),1200);
+ }
+}
+
+yesBtn.onclick=()=>{
+ startMusic();
+ explodeHearts();
+
+ fetch("https://formspree.io/f/mpqjqpzg",{
+  method:"POST",
+  headers:{'Content-Type':'application/json'},
+  body:JSON.stringify({message:"She clicked YES 💕"})
+ });
+
+ setTimeout(()=>{
+  document.getElementById("page1").style.display="none";
+  document.getElementById("page2").style.display="flex";
+ },900);
+};
+</script>
+
+</body>
+</html>
